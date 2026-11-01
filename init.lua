@@ -1,6 +1,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.opt.number = true
+vim.opt.cursorline = true
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -26,6 +27,8 @@ require("lazy").setup({
       config = function()
         require("pywal").setup()
         vim.cmd("colorscheme pywal")
+	vim.api.nvim_set_hl(0, "CursorLine", { bg = "#595959" })
+	vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#ffffff", bold = true })
       end,
     },
 
@@ -33,13 +36,14 @@ require("lazy").setup({
 
     {
       "nvim-lualine/lualine.nvim",
-      dependencies = { "nvim-tree/nvim-web-devicons" },
+      dependencies = { "nvim-web-devicons" },
       config = function()
         require("lualine").setup({
           options = {
             theme = "pywal",
-            component_separators = { left = "|", right = "|" },
-            section_separators = { left = "", right = "" },
+            icons_enabled = true,
+            component_separators = { left = '', right = ''},
+            section_separators = { left = '', right = ''},
           },
         })
       end,
@@ -47,21 +51,11 @@ require("lazy").setup({
     
     {
       "nvim-tree/nvim-tree.lua",
-      dependencies = { "nvim-tree/nvim-web-devicons" },
+      dependencies = { "nvim-web-devicons" },
       config = function()
         require("nvim-tree").setup({
           view = {
             width = 30,
-          },
-          renderer = {
-            icons = {
-              show = {
-                file = true,
-                folder = true,
-                folder_arrow = true,
-                git = true,
-              },
-            },
           },
         })
         vim.keymap.set("n", "<leader>", ":NvimTreeToggle<CR>", { silent = true })
@@ -71,13 +65,12 @@ require("lazy").setup({
     {
       "akinsho/bufferline.nvim",
       version = "*",
-      dependencies = { "nvim-tree/nvim-web-devicons" },
+      dependencies = { "nvim-web-devicons" },
       config = function()
         require("bufferline").setup({
           options = {
             diagnostics = "nvim_lsp",
             separator_style = "thin",
-	    theme = "pywal",
             offsets = {
               {
                 filetype = "NvimTree",
